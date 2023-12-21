@@ -9,7 +9,7 @@ owner = "opencodeiiita"
 repositories = ["Collaborative-Web-2023","Scoop-Frontend", "GrepIt-Backend", "Hitch-Backend","GrepIt-Frontend","Code-Digger-2023","Hitch-Frontend","Scoop-Backend",]  # Replace with your repository names
 
 
-github_token = "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"  # Replace with your actual GitHub personal access token
+github_token = "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"  # Replace with your actual GitHub personal access token
 
 
 def get_issues(repo):
@@ -39,7 +39,8 @@ def main():
         previous_issues = {}
         for repo in repositories:
             issues = get_issues(repo)
-            issue_numbers = [issue["number"] for issue in issues if "pull_request" not in issue]
+            issue_numbers = [issue["number"] for issue in issues if isinstance(issue, dict) and "number" in issue and "pull_request" not in issue]
+
             previous_issues[repo] = set(issue_numbers)
 
         print("Initial previous_issues:", previous_issues)
