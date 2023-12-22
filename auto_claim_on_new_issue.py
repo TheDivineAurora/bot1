@@ -9,7 +9,7 @@ owner = "opencodeiiita"
 repositories = ["Collaborative-Web-2023","Scoop-Frontend", "GrepIt-Backend", "Hitch-Backend","GrepIt-Frontend","Code-Digger-2023","Hitch-Frontend","Scoop-Backend",]  # Replace with your repository names
 
 
-github_token = "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"  # Replace with your actual GitHub personal access token
+github_token = "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"  # Replace with your actual GitHub personal access token
 
 
 def get_issues(repo):
@@ -39,31 +39,35 @@ def main():
         previous_issues = {}
         for repo in repositories:
             issues = get_issues(repo)
-            issue_numbers = [issue["number"] for issue in issues if isinstance(issue, dict) and "number" in issue and "pull_request" not in issue]
-
+            issue_numbers = [issue["number"] for issue in issues if "pull_request" not in issue]
             previous_issues[repo] = set(issue_numbers)
 
         print("Initial previous_issues:", previous_issues)
 
         while True:
             for repo in repositories:
-                issues = get_issues(repo)
-                current_issues = set(issue["number"] for issue in issues if "pull_request" not in issue)
+                try:
+                    issues = get_issues(repo)
+                    current_issues = set(issue["number"] for issue in issues if "pull_request" not in issue)
 
-                new_issues = current_issues - previous_issues[repo]
+                    new_issues = current_issues - previous_issues[repo]
 
-                if len(new_issues) > 0:
-                    for issue_number in new_issues:
-                        status_code = comment_on_issue(repo, issue_number)
+                    if len(new_issues) > 0:
+                        for issue_number in new_issues:
+                            status_code = comment_on_issue(repo, issue_number)
 
-                        if status_code == 201:
-                            print(f"Successfully commented 'claim' on issue {issue_number} in {owner}/{repo}.")
-                        else:
-                            print(f"Failed to comment 'claim' on issue {issue_number} in {owner}/{repo}. Status code: {status_code}")
+                            if status_code == 201:
+                                print(f"Successfully commented 'claim' on issue {issue_number} in {owner}/{repo}.")
+                            else:
+                                print(f"Failed to comment 'claim' on issue {issue_number} in {owner}/{repo}. Status code: {status_code}")
 
-                previous_issues[repo] = current_issues
+                    previous_issues[repo] = current_issues
 
-            time.sleep(20)  # Sleep for 5 seconds before checking again
+                except Exception as e:
+                    print(f"Error processing issues for {owner}/{repo}: {e}")
+
+            time.sleep(20)  # Sleep for 20 seconds before checking again
+
     except KeyboardInterrupt:
         print("Script terminated.")
 
