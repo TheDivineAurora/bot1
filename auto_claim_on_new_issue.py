@@ -9,7 +9,7 @@ owner = "opencodeiiita"
 repositories = ["Collaborative-Web-2023","Scoop-Frontend", "GrepIt-Backend", "Hitch-Backend","GrepIt-Frontend","Code-Digger-2023","Hitch-Frontend","Scoop-Backend",]  # Replace with your repository names
 
 
-github_token = "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"  # Replace with your actual GitHub personal access token
+github_token = "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"  # Replace with your actual GitHub personal access token
 
 
 def get_issues(repo):
